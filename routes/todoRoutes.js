@@ -1,9 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { getTodos, addTodos } = require("../controllers/todoContoller");
+const taskRouter = express.Router();
+const { getTodos, addTodo, getTasks, addTask} = require("../controllers/todoContoller");
 
-// router.get("/", getTodos);
 
-router.route("/").get(getTodos).post(addTodos);
+router.route("/").get(getTodos).post(addTodo);
 
-module.exports = { router };
+// router.param("todoId", (req, res, next, val) => {
+//   console.log(val);
+//   next();
+// });
+router.route("/:todoId").get(getTasks).post(addTask)
+
+module.exports = { router, taskRouter };
