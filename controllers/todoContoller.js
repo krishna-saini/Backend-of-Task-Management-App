@@ -1,7 +1,12 @@
+const { find } = require("../models/todo");
 const TodoModel = require("../models/todo");
 exports.getTodos = async (req, res) => {
+  const allTodos = await TodoModel.find();
   res.status(200).json({
-    message: "working route",
+    status:"success",
+    length: allTodos.length,
+    data:[allTodos]
+
   });
 };
 
