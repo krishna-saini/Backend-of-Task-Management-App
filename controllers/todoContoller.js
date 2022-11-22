@@ -4,9 +4,10 @@ const TodoModel = require("../models/todo");
 exports.getTodos = async (req, res) => {
   try {
     const allTodos = await TodoModel.find();
+    console.log(allTodos);
     res.status(200).json({
       status: "success",
-      results: tours.length,
+      results: allTodos.length,
       data: {
         allTodos,
       },
@@ -24,20 +25,12 @@ exports.addTodo = async (req, res, next) => {
   try {
     // get all data from req.body
     const { title } = req.body;
-
     // check data validity
     if (!title)
-      res.status(404).json({ status: "fail", message: "name field is empty" });
-
-    // check if todo already exists in db
-    const existingTodo = await TodoModel.findOne({ title });
-    if (existingTodo) {
       return res
         .status(404)
-        .json({ status: "fail", message: "Two todos cannot have same name" });
-    }
+        .json({ status: "fail", message: "name field is empty" });
 
-    // if not exists, create one
     const newTodo = await TodoModel.create({
       title,
     });
@@ -52,8 +45,13 @@ exports.updateTodo = async (req, res) => {
   try {
     // get data from req.body
     const { todoId, title } = req.body;
+    // console.log(title);
     // find it in db and update it directly
-    const todo = await TodoModel.findByIdAndUpdate(todoId, title);
+    const todo = await TodoModel.findByIdAndUpdate(
+      todoId,
+      { title: title },
+      { new: true }
+    );
     res.status(200).json({
       status: "success",
       data: {
@@ -68,8 +66,8 @@ exports.updateTodo = async (req, res) => {
 // delete a todo
 exports.deleteTodo = async (req, res) => {
   try {
-    await TodoModel.findByIdAndDelete(req.params.todoId);
-
+    const todo = await TodoModel.findByIdAndDelete(req.body.todoId);
+    console.log(req.body.todoId);
     res.status(204).json({
       status: "success",
       data: null,
@@ -87,12 +85,9 @@ exports.getTasks = async (req, res) => {
   try {
     // get todoId from req object
     const todoId = req.params.todoId;
-    // console.log(todoId);
+    console.log(todoId);
     // check if todoid exists in db or not
     const todo = await TodoModel.findById(todoId);
-    if (!todo) {
-      res.send(404).json({ status: "fail", message: "id not found" });
-    }
     res.status(200).json({ status: "success", data: { tasks: todo.tasks } });
   } catch (err) {
     res.status(404).json({
@@ -137,7 +132,6 @@ exports.updateTask = async (req, res, next) => {
 
     // find the todo
     const todo = await TodoModel.findById(req.params.todoId);
-
     todo.tasks[taskKey] = updatedTask;
     await todo.save();
     res.status(200).json({
@@ -159,7 +153,8 @@ exports.deleteTask = async (req, res) => {
   try {
     const { taskKey } = req.body;
     const todo = await TodoModel.findById(req.params.todoId);
-    todo.splice(taskKey, 1);
+    console.log(todo);
+    todo.tasks.splice(taskKey, 1);
     await todo.save();
     res.status(204).json({
       status: "success",
