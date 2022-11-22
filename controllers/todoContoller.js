@@ -1,11 +1,22 @@
-
 const TodoModel = require("../models/todo");
 
 // get all todos
 exports.getTodos = async (req, res) => {
-  res.status(200).json({
-    message: "working route",
-  });
+  try {
+    const allTodos = await TodoModel.find();
+    res.status(200).json({
+      status: "success",
+      results: tours.length,
+      data: {
+        allTodos,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
+  }
 };
 
 // add a todo
@@ -55,22 +66,23 @@ exports.updateTodo = async (req, res) => {
 };
 
 // delete a todo
-exports.deleteTodo = async(req,res)=>{
+exports.deleteTodo = async (req, res) => {
   try {
     await TodoModel.findByIdAndDelete(req.params.todoId);
 
     res.status(204).json({
-      status: 'success',
-      data: null
+      status: "success",
+      data: null,
     });
   } catch (err) {
     res.status(404).json({
-      status: 'fail',
-      message: err
+      status: "fail",
+      message: err,
     });
   }
-}
+};
 
+// get all tasks
 exports.getTasks = async (req, res) => {
   try {
     // get todoId from req object
@@ -80,10 +92,14 @@ exports.getTasks = async (req, res) => {
 
     res.send("task are here");
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
   }
 };
 
+// add a task
 exports.addTask = async (req, res, next) => {
   try {
     // get todoId from req object
@@ -105,5 +121,28 @@ exports.addTask = async (req, res, next) => {
     res.status(201).json({ status: "success", data: { todo } });
   } catch (err) {
     console.log(err);
+  }
+};
+
+// updata a task
+exports.updateTask = async (req, res, next) => {
+  try {
+    const { todoId, taskKey } = req.body;
+    const todo = await TodoModel.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // to return updated data
+      runValidators: true, // to check validators if any
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        tour,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
   }
 };
