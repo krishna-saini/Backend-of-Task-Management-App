@@ -127,17 +127,37 @@ exports.addTask = async (req, res, next) => {
 // updata a task
 exports.updateTask = async (req, res, next) => {
   try {
-    const { todoId, taskKey } = req.body;
-    const todo = await TodoModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true, // to return updated data
-      runValidators: true, // to check validators if any
-    });
+    const { taskKey, updatedTask } = req.body;
 
+    // find the todo
+    const todo = await TodoModel.findById(req.params.todoId);
+
+    todo.tasks[taskKey] = updatedTask;
+    await todo.save();
     res.status(200).json({
       status: "success",
       data: {
-        tour,
+        todo,
       },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+// delete a task
+exports.deleteTask = async (req, res) => {
+  try {
+    const { taskKey } = req.body;
+    const todo = await TodoModel.findById(req.params.todoId);
+    todo.splice(taskKey, 1);
+    await todo.save();
+    res.status(204).json({
+      status: "success",
+      data: null,
     });
   } catch (err) {
     res.status(404).json({
