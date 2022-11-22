@@ -89,8 +89,11 @@ exports.getTasks = async (req, res) => {
     const todoId = req.params.todoId;
     // console.log(todoId);
     // check if todoid exists in db or not
-
-    res.send("task are here");
+    const todo = await TodoModel.findById(todoId);
+    if (!todo) {
+      res.send(404).json({ status: "fail", message: "id not found" });
+    }
+    res.status(200).json({ status: "success", data: { tasks: todo.tasks } });
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -104,7 +107,7 @@ exports.addTask = async (req, res, next) => {
   try {
     // get todoId from req object
     const todoId = req.params.todoId;
-    console.log(todoId);
+    // console.log(todoId);
     // check if todoid exists in db or not
     const todo = await TodoModel.findById(todoId);
     // console.log(todo);
@@ -120,7 +123,10 @@ exports.addTask = async (req, res, next) => {
     await todo.save();
     res.status(201).json({ status: "success", data: { todo } });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
   }
 };
 
