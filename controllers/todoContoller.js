@@ -54,6 +54,23 @@ exports.updateTodo = async (req, res) => {
   }
 };
 
+// delete a todo
+exports.deleteTodo = async(req,res)=>{
+  try {
+    await TodoModel.findByIdAndDelete(req.params.todoId);
+
+    res.status(204).json({
+      status: 'success',
+      data: null
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
+}
+
 exports.getTasks = async (req, res) => {
   try {
     // get todoId from req object
