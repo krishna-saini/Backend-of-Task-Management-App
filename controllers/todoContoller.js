@@ -1,12 +1,21 @@
+const { find } = require("../models/todo");
 const TodoModel = require("../models/todo");
+
+// get all todos
 exports.getTodos = async (req, res) => {
-  res.status(200).json({
-    message: "working route",
-  });
+  try {
+    const allTodos = await TodoModel.find();
+    res.status(200).json({
+      status: "success",
+      length: allTodos.length,
+      data: [allTodos],
+    });
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err });
+  }
 };
 
-// module.exports = { getTodos };
-
+// add a todo
 exports.addTodo = async (req, res, next) => {
   try {
     // get all data from req.body
@@ -30,7 +39,25 @@ exports.addTodo = async (req, res, next) => {
     });
     return res.status(201).json({ status: "success", data: { newTodo } });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({ status: "fail", message: err });
+  }
+};
+
+// update a todo
+exports.updateTodo = async (req, res) => {
+  try {
+    // get data from req.body
+    const { todoId, title } = req.body;
+    // find it in db and update it directly
+    const todo = await TodoModel.findByIdAndUpdate(todoId, title);
+    res.status(200).json({
+      status: "success",
+      data: {
+        todo,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err });
   }
 };
 
@@ -53,11 +80,13 @@ exports.addTask = async (req, res, next) => {
     const todoId = req.params.todoId;
     console.log(todoId);
     // check if todoid exists in db or not
-    const todo = await TodoModel.findById(todoId );
+    const todo = await TodoModel.findById(todoId);
     // console.log(todo);
-    if (!todo) { return res
-      .status(404)
-      .json({ status: "fail", message: "todoId not found" });}
+    if (!todo) {
+      return res
+        .status(404)
+        .json({ status: "fail", message: "todoId not found" });
+    }
 
     // get data from req.body
     const { task } = req.body;
