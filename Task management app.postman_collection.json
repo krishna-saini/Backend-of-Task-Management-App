@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "31fc9e84-f3d9-4df1-b113-e5701f765ffe",
+		"name": "Task management app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24020259"
+	},
+	"item": [
+		{
+			"name": "get all & filtered todos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"query": [
+						{
+							"key": "title",
+							"value": "todayt",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add a Todo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "Tuesday Task",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "title",
+							"value": "thrusday task",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4001/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a todo",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "todoId",
+							"value": "637ba1689c5c99c21b950a2d",
+							"type": "text"
+						},
+						{
+							"key": "title",
+							"value": "thrusday main 2315",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4001/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a todo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "todoId",
+							"value": "637ba1689c5c99c21b950a2d",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4001/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						""
+					],
+					"query": [
+						{
+							"key": "todoId",
+							"value": "637ba1689c5c99c21b950a2d",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4001/637bac41b1a6bad0729b852q",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						"637bac41b1a6bad0729b852q"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add a task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "task",
+							"value": "wake up early30",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4001/637bac41b1a6bad0729b852d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						"637bac41b1a6bad0729b852d"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "wake up early",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a task",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "taskKey",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "updatedTask",
+							"value": "new task21",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:4001/637bac41b1a6bad0729b852d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4001",
+					"path": [
+						"637bac41b1a6bad0729b852d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete a task",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

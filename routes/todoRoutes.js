@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { getAllAndFilteredTodos, addTodo,searchTodo, updateTodo,deleteTodo, getTasks, addTask, updateTask, deleteTask} = require("../controllers/todoContoller");
+const { getAllAndFilteredTodos, addTodo, updateTodo,deleteTodo} = require("../controllers/todoContoller");
+const { getTasks, addTask, updateTask, deleteTask} = require("../controllers/taskController");
 
-
+// home routes
 router.route("/").get(getAllAndFilteredTodos).post(addTodo).patch(updateTodo).delete(deleteTodo);
 
-// router.param("todoId", (req, res, next, val) => {
-//   console.log(val);
-//   next();
-// });
+// tasks routes
 router.route("/:todoId").get(getTasks).post(addTask).patch(updateTask).delete(deleteTask)
 
-module.exports = { router};
+
+
+module.exports =  router;
