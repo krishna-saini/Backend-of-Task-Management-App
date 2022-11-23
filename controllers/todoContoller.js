@@ -1,17 +1,37 @@
 const TodoModel = require("../models/todo");
 
 // get all todos
-exports.getTodos = async (req, res) => {
+exports.getAllAndFilteredTodos = async (req, res) => {
   try {
-    const allTodos = await TodoModel.find();
-    console.log(allTodos);
-    res.status(200).json({
-      status: "success",
-      results: allTodos.length,
-      data: {
-        allTodos,
-      },
-    });
+    // check if any query is passed
+    const query = req.query;
+    // if no query passed
+    if (Object.keys(query).length === 0) {
+      // return all documents
+      const todo = await TodoModel.find();
+      // send response
+      return res.status(200).json({
+        status: "success",
+        results: todo.length,
+        data: {
+          todo,
+        },
+      });
+    } else {
+      // if query exists, send filtered data as per query(title of todo)
+      const todo = await TodoModel.find(query);
+      console.log(todo);
+      if (todo.length===0) {
+        return res.status(404).json({ status: "fail", message: "no todo found" });
+      }
+      return res.status(200).json({
+        status: "success",
+        results: todo.length,
+        data: {
+          todo,
+        },
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -40,6 +60,14 @@ exports.addTodo = async (req, res, next) => {
   }
 };
 
+//search a todo
+exports.searchTodo = async (req, res, next) => {
+  try {
+    console.log(req.query);
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err });
+  }
+};
 // update a todo
 exports.updateTodo = async (req, res) => {
   try {
@@ -153,7 +181,6 @@ exports.deleteTask = async (req, res) => {
   try {
     const { taskKey } = req.body;
     const todo = await TodoModel.findById(req.params.todoId);
-    console.log(todo);
     todo.tasks.splice(taskKey, 1);
     await todo.save();
     res.status(204).json({

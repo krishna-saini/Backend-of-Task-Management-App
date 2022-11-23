@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { getTodos, addTodo,updateTodo,deleteTodo, getTasks, addTask, updateTask, deleteTask} = require("../controllers/todoContoller");
+const { getAllAndFilteredTodos, addTodo,searchTodo, updateTodo,deleteTodo, getTasks, addTask, updateTask, deleteTask} = require("../controllers/todoContoller");
 
 
-router.route("/").get(getTodos).post(addTodo).patch(updateTodo).delete(deleteTodo);
+router.route("/").get(getAllAndFilteredTodos).post(addTodo).patch(updateTodo).delete(deleteTodo);
 
 // router.param("todoId", (req, res, next, val) => {
 //   console.log(val);

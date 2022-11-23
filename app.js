@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { application } = require("express");
 const express = require("express");
-const { router, taskRouter } = require("./routes/todoRoutes");
+const { router} = require("./routes/todoRoutes");
 
 require("./config/database").connectDB(); //Connecting Database
 const app = express();
