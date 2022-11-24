@@ -12,8 +12,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 // Routes
 // alltodos route
 app.use("/", todoRouter);
-// tasks route
-// app.use('/', taskRouter)
+
 
 // lsitening at server 
 app.listen(process.env.PORT, () => {
