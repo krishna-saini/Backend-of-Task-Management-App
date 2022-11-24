@@ -1,5 +1,5 @@
 # Task-Management-App
-A simple yet effective project to develop a full stack project.
+A simple yet effective project to learn full stack tech stacks.
 
 ## task assigned by -
 It is as assignment project as part of [ineuron.ai](https://ineuron.ai/) under the guidance of [Hitesh Choudharay](https://www.linkedin.com/in/hiteshchoudhary/)
