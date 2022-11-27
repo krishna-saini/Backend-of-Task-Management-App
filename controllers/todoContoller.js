@@ -81,7 +81,7 @@ exports.updateTodo = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404).json({ status: "fail", message: err });
+    res.status(404).json({ status: "fail", message: err || "fail to update todo" });
   }
 };
 
