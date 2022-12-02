@@ -41,7 +41,7 @@ exports.searchTodo = async (req, res) => {
       throw new Error("no such query found");
     }
     // else send the matched todo
-    return res.status(200).json({
+     res.status(200).json({
       status: "success",
       results: todo.length,
       data: {
