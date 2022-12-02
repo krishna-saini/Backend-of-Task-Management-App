@@ -28,16 +28,28 @@ exports.getAllTodos = async (req, res) => {
 exports.searchTodo = async (req, res) => {
   try {
     // check if any query is passed
-    const {q} = req.query;
+    const { q } = req.query;
+    console.log(q);
     // if no query passed
     if (!q) {
       throw new Error("Search value  is required to fetch the todos");
-    } 
+    }
     // if query exists, send filtered data as per query(title of todo)
-    const todo = await TodoModel.find({ title: q});
-
+    const todo = await TodoModel.find({ title: new RegExp(q,"i") });
+    // if no MATCHING data found
+    if (todo.length === 0) {
+      throw new Error("no such query found");
+    }
+    // else send the matched todo
+    return res.status(200).json({
+      status: "success",
+      results: todo.length,
+      data: {
+        todo,
+      },
+    });
   } catch (err) {
-    res.status(404).json({ status: "fail", message: err });
+    res.status(404).json({ status: "fail", message: err.message });
   }
 };
 
