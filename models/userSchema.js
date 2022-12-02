@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
     required: [true, "email is requireed"],
     unique: true,
   },
-  password: { type: String, required: [true, "password is required"] },
   token: {
     type: String,
   },
