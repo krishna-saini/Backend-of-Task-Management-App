@@ -3,46 +3,41 @@
  */
 const TodoModel = require("../models/todo");
 
-// get all and filtered todos
-exports.getAllAndFilteredTodos = async (req, res) => {
+// get all todos
+exports.getAllTodos = async (req, res) => {
   try {
-    // check if any query is passed
-    const { searchQuery } = req.query;
-    // if no query passed
-    if (!searchQuery) {
-      throw new Error("Search value  is required to fetch the todos");
-    } else {
-      // if query exists, send filtered data as per query(title of todo)
-      const todo = await TodoModel.find({ title: searchQuery });
-      // if no data found
-      if (todo.length === 0) {
-        // return whole data
-        const todo = await TodoModel.find();
-        // send response
-        return res.status(200).json({
-          status: "success",
-          results: todo.length,
-          data: {
-            todo,
-          },
-        });
-        // or return error
-        throw new Error("no such query found");
-      }
-      // else send the matched todo
-      return res.status(200).json({
-        status: "success",
-        results: todo.length,
-        data: {
-          todo,
-        },
-      });
-    }
+    // return whole data
+    const todo = await TodoModel.find();
+    // send response
+    return res.status(200).json({
+      status: "success",
+      results: todo.length,
+      data: {
+        todo,
+      },
+    });
   } catch (err) {
     res.status(404).json({
       status: "fail",
       message: err,
     });
+  }
+};
+
+// search todo
+exports.searchTodo = async (req, res) => {
+  try {
+    // check if any query is passed
+    const {q} = req.query;
+    // if no query passed
+    if (!q) {
+      throw new Error("Search value  is required to fetch the todos");
+    } 
+    // if query exists, send filtered data as per query(title of todo)
+    const todo = await TodoModel.find({ title: q});
+
+  } catch (err) {
+    res.status(404).json({ status: "fail", message: err });
   }
 };
 
