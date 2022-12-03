@@ -1,13 +1,16 @@
 /**
- * Importing the todo model to perform CRUD operations
+ * Importing the todo Schema to perform CRUD operations
  */
-const TodoModel = require("../models/todo");
+const TodoModel = require("../models/todoSchema");
 
 // get all todos
 exports.getAllTodos = async (req, res) => {
   try {
     // Destructures the input received in req.body.
     const { id } = req.body;
+    console.log(req.body);
+    // if no id is sent from client
+    if(!id) throw new Error('user is not logged in')
     // check if that id exists in db
     const todos = await TodoModel.find({ id });
     // if no todos exists for this id, send nothing
@@ -24,7 +27,7 @@ exports.getAllTodos = async (req, res) => {
   } catch (err) {
     res.status(404).json({
       status: "fail",
-      message: err,
+      message: err.message,
     });
   }
 };
