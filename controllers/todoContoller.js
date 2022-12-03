@@ -8,22 +8,24 @@ exports.getAllTodos = async (req, res) => {
   try {
     // Destructures the input received in req.body.
     const { id } = req.body;
-    console.log(req.body);
+    console.log("id is", id);
     // if no id is sent from client
-    if(!id) throw new Error('user is not logged in')
+    if (!id) throw new Error("user is not logged in");
     // check if that id exists in db
     const todos = await TodoModel.find({ id });
     // if no todos exists for this id, send nothing
-    // if todos exists , send them all;
-    if (todos.length > 0) {
-      res.status(200).json({
-        status: "success",
-        results: todos.length,
-        data: {
-          todos,
-        },
-      });
+
+    if (todos.length === 0) {
+      throw new Error("unauthorized access");
     }
+    // if todos exists , send them all;
+    res.status(200).json({
+      status: "success",
+      results: todos.length,
+      data: {
+        todos,
+      },
+    });
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -37,13 +39,14 @@ exports.searchTodo = async (req, res) => {
   try {
     // check if any query is passed
     const { q } = req.query;
-    console.log(q);
+    const { id } = req.body;
+    console.log(q, id);
     // if no query passed
     if (!q) {
       throw new Error("Search value  is required to fetch the todos");
     }
     // if query exists, send filtered data as per query(title of todo)
-    const todo = await TodoModel.find({ title: new RegExp(q, "i") });
+    const todo = await TodoModel.find({ id: id, title: new RegExp(q, "i") });
     // if no MATCHING data found
     if (todo.length === 0) {
       throw new Error("no such query found");
@@ -57,7 +60,8 @@ exports.searchTodo = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404).json({ status: "failsadfds", message: err });
+    console.log(err.message);
+    res.status(404).json({ status: "fail", message: err.message });
   }
 };
 
@@ -65,12 +69,14 @@ exports.searchTodo = async (req, res) => {
 exports.addTodo = async (req, res, next) => {
   try {
     // get all data from req.body
-    const { title } = req.body;
+    const { id, title } = req.body;
+    console.log(id, title);
     // check data validity
     if (!title) {
       throw new Error("title field is empty");
     }
     const newTodo = await TodoModel.create({
+      id,
       title,
     });
     return res.status(201).json({ status: "success", data: { newTodo } });
