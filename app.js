@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require('cors')
 const  todoRouter = require("./routes/todoRoutes");
 const userRouter = require("./routes/userRoutes")
 
@@ -9,6 +10,7 @@ const app = express();
 // Built -m MIDDLWARE
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(cors()) // Enable All CORS Requests
 
 // Routes
 // alltodos route

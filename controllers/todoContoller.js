@@ -18,6 +18,7 @@ exports.getAllTodos = async (req, res) => {
     if (todos.length === 0) {
       throw new Error("unauthorized access");
     }
+
     // if todos exists , send them all;
     res.status(200).json({
       status: "success",
@@ -66,20 +67,18 @@ exports.searchTodo = async (req, res) => {
 };
 
 // add a todo
-exports.addTodo = async (req, res, next) => {
+exports.addTodo = async (req, res) => {
   try {
     // get all data from req.body
     const { id, title } = req.body;
-    console.log(id, title);
+
     // check data validity
     if (!title) {
       throw new Error("title field is empty");
     }
-    const newTodo = await TodoModel.create({
-      id,
-      title,
-    });
-    return res.status(201).json({ status: "success", data: { newTodo } });
+    const newTodo = await TodoModel.create({userId:id, title:title});
+   
+    res.status(201).json({ status: "success", data: { newTodo } });
   } catch (err) {
     res.status(404).json({ status: "fail", message: err });
   }
