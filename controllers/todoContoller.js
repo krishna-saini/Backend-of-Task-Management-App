@@ -6,16 +6,21 @@ const TodoModel = require("../models/todo");
 // get all todos
 exports.getAllTodos = async (req, res) => {
   try {
-    // return whole data
-    const todo = await TodoModel.find();
-    // send response
-    return res.status(200).json({
-      status: "success",
-      results: todo.length,
-      data: {
-        todo,
-      },
-    });
+    // Destructures the input received in req.body.
+    const { id } = req.body;
+    // check if that id exists in db
+    const todos = await TodoModel.find({ id });
+    // if no todos exists for this id, send nothing
+    // if todos exists , send them all;
+    if (todos.length > 0) {
+      res.status(200).json({
+        status: "success",
+        results: todos.length,
+        data: {
+          todos,
+        },
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: "fail",
@@ -35,13 +40,13 @@ exports.searchTodo = async (req, res) => {
       throw new Error("Search value  is required to fetch the todos");
     }
     // if query exists, send filtered data as per query(title of todo)
-    const todo = await TodoModel.find({ title: new RegExp(q,"i") });
+    const todo = await TodoModel.find({ title: new RegExp(q, "i") });
     // if no MATCHING data found
     if (todo.length === 0) {
       throw new Error("no such query found");
     }
     // else send the matched todo
-     res.status(200).json({
+    res.status(200).json({
       status: "success",
       results: todo.length,
       data: {
@@ -49,7 +54,7 @@ exports.searchTodo = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(404).json({ status: "fail", message: err.message });
+    res.status(404).json({ status: "failsadfds", message: err });
   }
 };
 
